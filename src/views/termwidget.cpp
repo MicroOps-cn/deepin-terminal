@@ -167,6 +167,11 @@ TermWidget::TermWidget(const TermProperties &properties, QWidget *parent) : QTer
         sendText(args);
     }
 
+    if (m_properties.contains(TabTitle)) {
+        QString tabTitleFormat = m_properties[TabTitle].toString();
+        qDebug() << "set tab title format:" << tabTitleFormat;
+        setTabFormat(tabTitleFormat);
+    }
     setFocusPolicy(Qt::NoFocus);
 
     TermWidgetPage *parentPage = qobject_cast<TermWidgetPage *>(parent);

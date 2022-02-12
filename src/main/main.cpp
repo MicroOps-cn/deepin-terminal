@@ -68,8 +68,8 @@ int main(int argc, char *argv[])
     if (!manager.initDBus()) {
         // 初始化失败，则已经注册过dbus
         // 判断是否能创建新的的窗口
-        // 不是雷神且正在创建
-        if (!properties[QuakeMode].toBool() && !Service::instance()->getEnable(startTime)) {
+        // 不是雷神和新标签模式且正在创建
+        if (!properties[QuakeMode].toBool() && !properties[TabMode].toBool() && !Service::instance()->getEnable(startTime)){
             qDebug() << "[sub app] Server can't create, drop this create request! time use "
                      << useTime.elapsed() << "ms";
             return 0;

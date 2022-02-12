@@ -411,6 +411,16 @@ void Service::Entry(QStringList arguments)
         WindowsManager::instance()->runQuakeWindow(properties);
         return;
     }
+    
+    if(properties[TabMode].toBool()){
+        QList<MainWindow *> normalWindows = WindowsManager::instance()->getNormalWindowList();
+        // 从遍历到的第一个普通窗口中添加一个标签页
+        for (int i = normalWindows.length()-1; i >=0 ; i--){
+           (normalWindows[i])->activateWindow();
+           (normalWindows[i])->addTab(properties,true);
+           return ;
+        }
+    }
 
     // 普通窗口处理入口
     WindowsManager::instance()->createNormalWindow(properties);

@@ -34,7 +34,9 @@ enum TermProperty {
     StartWindowState,  // mainwindow使用
     KeepOpen,          // 仅供第一个terminal使用
     Script,            // 仅供第一个terminal使用
-    DragDropTerminal   // 窗口标签拖拽时使用
+    DragDropTerminal,  // 窗口标签拖拽时使用
+    TabTitle,          // 标签页标题
+    TabMode,           // 标签页模式
 };
 
 /*******************************************************************************
@@ -73,6 +75,13 @@ public:
      * @param workingDir 工作目录
      */
     void setWorkingDir(QString workingDir);
+
+    /**
+     * @brief 设置标签页标题
+     * @author xxxxxxxxxx sunlinyao
+     * @param tabTitle 标题
+     */
+    void setTabTitle(QString tabTitle);
 
     /**
      * @brief 重载[]操作符

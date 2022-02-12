@@ -325,6 +325,12 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
     parser.addVersionOption();
     parser.setOptionsAfterPositionalArgumentsMode(QCommandLineParser::ParseAsOptions);
     parser.setSingleDashWordOptionMode(QCommandLineParser::ParseAsCompactedShortOptions);
+    QCommandLineOption optTabTitle("tab-title",
+                                   QObject::tr("set the tab title"),
+                                   "name");
+    QCommandLineOption optTab("tab",
+                              QObject::tr("create tab from running instances"),
+                              "");
     QCommandLineOption optWorkDirectory({ "w", "work-directory" },
                                         QObject::tr("Set the work directory"),
                                         "path");
@@ -351,6 +357,8 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
                         optQuakeMode,
                         optWindowState,
                         optKeepOpen,
+                        optTabTitle,
+                        optTab,
                         optScript });
     // parser.addPositionalArgument("-e", QObject::tr("Execute command in the terminal"), "command");
 
@@ -367,6 +375,12 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
     }
     if (parser.isSet(optWorkDirectory)) {
         Properties[WorkingDir] = parser.value(optWorkDirectory);
+    }
+    if (parser.isSet(optTab)) {
+        Properties[TabMode] = true;
+    }
+    if (parser.isSet(optTabTitle)) {
+        Properties[TabTitle] = parser.value(optTabTitle);
     }
     if (parser.isSet(optKeepOpen)) {
         Properties[KeepOpen] = "";
