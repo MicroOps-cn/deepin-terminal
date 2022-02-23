@@ -22,7 +22,7 @@
 #include "utils.h"
 #include "termwidget.h"
 #include "dbusmanager.h"
-
+#include "iostream"
 #include <DLog>
 #include <DMessageBox>
 #include <DLineEdit>
@@ -350,6 +350,46 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
     QCommandLineOption optKeepOpen("keep-open",
                                    QObject::tr("Keep terminal open when command finishes"),
                                    "");
+
+    QCommandLineOption optRemoteUrl("remote",
+                                   QObject::tr("Remote server connect url,syntax: [<schema>://][<username>]:[<password>]host?[params...], example: ssh://root:passworld@1.1.1.1:22?backspace=escape-sequence&private-key=~/.ssh/id_rsa"),
+                                   "url");
+    QCommandLineOption optRemoteProtocol("remote-protocol",
+                                   QObject::tr("Remote server portocol"),
+                                   "protocol","ssh");
+    QCommandLineOption optRemoteName("remote-name",
+                                   QObject::tr("Remote server name"),
+                                   "name");
+    QCommandLineOption optRemoteUsername("remote-username",
+                                   QObject::tr("Remote server login username"),
+                                   "username","root");
+    QCommandLineOption optRemotePassword("remote-password",
+                                   QObject::tr("Remote server passwrod"),
+                                   "password");
+    QCommandLineOption optRemotePort("remote-port",
+                                   QObject::tr("Remote server port"),
+                                   "port","22");
+    QCommandLineOption optRemotePrivateKey("remote-private-key",
+                                   QObject::tr("Remote server private key"),
+                                   "path");
+    QCommandLineOption optRemotePath("remote-path",
+                                   QObject::tr("Remote server default path"),
+                                   "path");
+    QCommandLineOption optRemoteCommand("remote-commond",
+                                   QObject::tr("Execute command after login remote server"),
+                                   "cmd");
+    QCommandLineOption optRemoteEncoding("remote-encoding",
+                                   QObject::tr("Remote server default encoding"),
+                                   "encoding","UTF-8");
+    QCommandLineOption optRemoteBackspaceKey("remote-backspace",
+                                   QObject::tr("Remote server backspace sequence"),
+                                   "sequence","ascii-del");
+    QCommandLineOption optRemoteDeleteKey("remote-delete",
+                                   QObject::tr("Remote server delete sequence"),
+                                   "sequence","escape-sequence");
+    QCommandLineOption optRemoteOpts("remote-opts",
+                                   QObject::tr("Remote custom options"),
+                                   "opts","");
     // parser.addPositionalArgument("e",  "Execute command in the terminal", "command");
 
     parser.addOptions({ optWorkDirectory,
@@ -359,6 +399,19 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
                         optKeepOpen,
                         optTabTitle,
                         optTab,
+                        optRemoteUrl, 
+                        optRemoteBackspaceKey, 
+                        optRemoteCommand, 
+                        optRemoteDeleteKey, 
+                        optRemoteEncoding,
+                        optRemoteName,
+                        optRemotePassword,
+                        optRemotePath,
+                        optRemotePort,
+                        optRemotePrivateKey,
+                        optRemoteProtocol,
+                        optRemoteUsername,
+                        optRemoteOpts,
                         optScript });
     // parser.addPositionalArgument("-e", QObject::tr("Execute command in the terminal"), "command");
 
@@ -387,6 +440,61 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
     }
     if (parser.isSet(optScript)) {
         Properties[Script] = parser.value(optScript);
+    }
+    if (parser.isSet(optRemoteUrl)){
+        ServerConfig *serverConfig = new(ServerConfig);
+        if (parser.isSet(optRemoteUrl)){
+            QString remoteRawUrl = parser.value(optRemoteUrl);
+            
+            if(parser.value(optRemoteUrl).indexOf("://")<0){
+                remoteRawUrl = parser.value(optRemoteProtocol)+"://"+remoteRawUrl;
+            }
+            QUrl remoteUrl(remoteRawUrl);
+            if(remoteUrl.isValid()){
+                serverConfig->m_address = remoteUrl.host(); 
+                if(remoteUrl.port()>=0){
+                    serverConfig->m_port = QString::number(remoteUrl.port());
+                }
+                serverConfig->m_userName = remoteUrl.userName();
+                serverConfig->m_password = remoteUrl.password();
+                if(remoteUrl.hasQuery()){
+                    QUrlQuery urlQuery(remoteUrl.query());
+                    serverConfig->m_privateKey = urlQuery.queryItemValue("private-key");
+                    serverConfig->m_path = urlQuery.queryItemValue("path");
+                    serverConfig->m_command = urlQuery.queryItemValue("command");
+                    serverConfig->m_encoding = urlQuery.queryItemValue("encoding");
+                    serverConfig->m_backspaceKey = urlQuery.queryItemValue("backspace");
+                    serverConfig->m_deleteKey = urlQuery.queryItemValue("delete");
+                }
+            }else{
+                std::cout << "remote server url format error." << std::endl;
+                parser.showHelp();
+                qApp->quit();
+            }
+        }
+        serverConfig->m_serverName = parser.value(optRemoteName);
+        if (serverConfig->m_port.isEmpty())
+            serverConfig->m_port = parser.value(optRemotePort);
+        if (serverConfig->m_userName.isEmpty())
+            serverConfig->m_userName = parser.value(optRemoteUsername);
+        if (serverConfig->m_password.isEmpty())
+            serverConfig->m_password = parser.value(optRemotePassword);
+        if (serverConfig->m_privateKey.isEmpty())
+            serverConfig->m_privateKey = parser.value(optRemotePrivateKey);
+        if (serverConfig->m_path.isEmpty())
+            serverConfig->m_path = parser.value(optRemotePath);
+        if (serverConfig->m_command.isEmpty())
+            serverConfig->m_command = parser.value(optRemoteCommand);
+        if (serverConfig->m_encoding.isEmpty())
+            serverConfig->m_encoding = parser.value(optRemoteEncoding);
+        if (serverConfig->m_backspaceKey.isEmpty())
+            serverConfig->m_backspaceKey = parser.value(optRemoteBackspaceKey);
+        if (serverConfig->m_deleteKey.isEmpty())
+            serverConfig->m_deleteKey = parser.value(optRemoteDeleteKey);
+        if (serverConfig->m_opts.isEmpty())
+            serverConfig->m_opts = parser.value(optRemoteOpts);
+
+        Properties[RemoteConfig] = QVariant::fromValue(serverConfig);
     }
 
     if (parser.isSet(optQuakeMode)) {

@@ -37,6 +37,7 @@ enum TermProperty {
     DragDropTerminal,  // 窗口标签拖拽时使用
     TabTitle,          // 标签页标题
     TabMode,           // 标签页模式
+    RemoteConfig       // 远程配置
 };
 
 /*******************************************************************************

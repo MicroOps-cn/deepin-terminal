@@ -423,6 +423,10 @@ bool MainWindow::isTabChangeColor(const QString &tabIdentifier)
     return m_tabChangeColorMap.value(tabIdentifier);
 }
 
+void MainWindow::doConnectServer(ServerConfig* config){
+    remoteManagPlugin->doCennectServer(config);
+}
+
 void MainWindow::addTab(TermProperties properties, bool activeTab)
 {
     qint64 startTime = QDateTime::currentMSecsSinceEpoch();

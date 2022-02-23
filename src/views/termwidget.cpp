@@ -170,6 +170,9 @@ TermWidget::TermWidget(const TermProperties &properties, QWidget *parent) : QTer
     if (m_properties.contains(TabTitle)) {
         QString tabTitleFormat = m_properties[TabTitle].toString();
         qDebug() << "set tab title format:" << tabTitleFormat;
+        if(properties[RemoteConfig].canConvert<ServerConfig*>()){
+            setRemoteTabFormat(tabTitleFormat);
+        }else{
         setTabFormat(tabTitleFormat);
     }
     setFocusPolicy(Qt::NoFocus);

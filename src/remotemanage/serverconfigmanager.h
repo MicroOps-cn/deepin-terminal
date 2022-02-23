@@ -54,7 +54,9 @@ struct ServerConfig {
     QString m_encoding;
     QString m_backspaceKey;
     QString m_deleteKey;
+    QString m_opts;
 };
+Q_DECLARE_METATYPE(ServerConfig*);
 
 // 旧版本groupName的count
 #define OLD_VERTIONCOUNT 3

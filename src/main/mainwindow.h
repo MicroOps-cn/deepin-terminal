@@ -124,6 +124,11 @@ public:
     ~MainWindow() override;
 
     /**
+     * @brief 连接到服务器
+     * @author xxxxxxxx 孙林耀
+     */
+    void doConnectServer(ServerConfig* config);
+    /**
      * @brief 基类增加标签
      * @author ut000439 wangpeili
      * @param properties 标签页属性

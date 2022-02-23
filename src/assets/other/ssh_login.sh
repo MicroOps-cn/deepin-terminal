@@ -38,7 +38,7 @@ set private_key [lindex $argv 3]
 set password [lindex $argv 4]
 set authentication {<<AUTHENTICATION>>}
 set ssh_cmd {zssh -X -o ServerAliveInterval=60}
-set ssh_opt {$user@$server -p $port -o PubkeyAuthentication=$authentication}
+set ssh_opt {$user@$server -p $port -o PubkeyAuthentication=$authentication <<SSH_OPTS>>}
 set remote_command {<<REMOTE_COMMAND>>}
 
 # fix bug#64758 修改服务器密码，点击连接没有密码错误提示语，且可以成功连接
@@ -61,7 +61,7 @@ trap {
 if { $authentication == "no" } {
 eval spawn $ssh_cmd $ssh_opt -t $remote_command exec \\\$SHELL -l
 } else {
-eval spawn $ssh_cmd $ssh_opt -i $private_key -t $remote_command exec \\\$SHELL -l
+eval spawn $ssh_cmd $ssh_opt  -i $private_key -t $remote_command exec \\\$SHELL -l
 }
 
 if { [string length $password] } {

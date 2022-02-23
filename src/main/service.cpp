@@ -417,7 +417,11 @@ void Service::Entry(QStringList arguments)
         // 从遍历到的第一个普通窗口中添加一个标签页
         for (int i = normalWindows.length()-1; i >=0 ; i--){
            (normalWindows[i])->activateWindow();
-           (normalWindows[i])->addTab(properties,true);
+            (normalWindows[i])->addTab(properties,true);
+           if(properties[RemoteConfig].canConvert<ServerConfig*>()){
+               ServerConfig *serverConfig = properties[RemoteConfig].value<ServerConfig*>();
+               (normalWindows[i])->doConnectServer(serverConfig);
+           }
            return ;
         }
     }

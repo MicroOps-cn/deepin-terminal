@@ -192,7 +192,7 @@ QString RemoteManagementPlugin::createShellFile(ServerConfig *curServer)
         sourceFile.close();
     }
 
-    QString strArgs = QString(" '<<USER>>' <<SERVER>> <<PORT>> '<<PRIVATE_KEY>>' '<<PASSWORD>>'");
+    QString strArgs = QString(" '<<USER>>' <<SERVER>> <<PORT>> '<<PRIVATE_KEY>>' '<<PASSWORD>>' '<<SSH_OPTS>>'");
     // 用远程管理数据替换文件内的关键字
     strArgs.replace("<<USER>>", curServer->m_userName);
     strArgs.replace("<<SERVER>>", curServer->m_address.trimmed());
@@ -222,7 +222,7 @@ QString RemoteManagementPlugin::createShellFile(ServerConfig *curServer)
         remote_command = remote_command + command + " && ";
     }
     fileString.replace("<<REMOTE_COMMAND>>", remote_command);
-
+    fileString.replace("<<SSH_OPTS>>",curServer->m_opts);
     // 创建临时文件和执行脚本所需要的参数
     QString toFileStr = "/tmp/terminal-" + Utils::getRandString();
     QFile toFile(toFileStr);

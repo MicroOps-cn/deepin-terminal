@@ -108,6 +108,12 @@ void WindowsManager::createNormalWindow(TermProperties properties)
     qint64 newMainWindowTime = newWindow->createNewMainWindowTime();
     QString strNewMainWindowTime = GRAB_POINT + LOGO_TYPE + CREATE_NEW_MAINWINDOE + QString::number(newMainWindowTime);
     qDebug() << qPrintable(strNewMainWindowTime);
+    if(properties[RemoteConfig].canConvert<ServerConfig*>()){
+        ServerConfig *serverConfig = properties[RemoteConfig].value<ServerConfig*>();
+        if(!serverConfig->m_address.isEmpty()){
+            newWindow->doConnectServer(serverConfig);
+        }
+    }
 }
 
 void WindowsManager::onMainwindowClosed(MainWindow *window)
