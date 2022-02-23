@@ -175,6 +175,7 @@ TermWidget::TermWidget(const TermProperties &properties, QWidget *parent) : QTer
         }else{
         setTabFormat(tabTitleFormat);
     }
+    }
     setFocusPolicy(Qt::NoFocus);
 
     TermWidgetPage *parentPage = qobject_cast<TermWidgetPage *>(parent);
