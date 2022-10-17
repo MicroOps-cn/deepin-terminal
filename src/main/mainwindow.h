@@ -598,6 +598,7 @@ protected slots:
     void menuHideSetThemeSlot();
 
     void slotShowRenameTabDialog(QString Identifier);
+    void slotCloneTab(QString Identifier);
     void slotMenuCloseOtherTab(QString Identifier);
     void slotMenuCloseTab(QString Identifier);
     void slotTabBarClicked(int index, QString tabIdentifier);

@@ -253,6 +253,11 @@ public:
      */
     void initTabTitle();
     /**
+     * @brief 克隆会话
+     * @author xxxxxxx
+     */
+    void cloneSession();
+    /**
      * @brief 初始化标签标题参数列表
      * @author ut000610 戴正文
      */

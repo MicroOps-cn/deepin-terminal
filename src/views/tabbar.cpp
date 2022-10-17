@@ -512,21 +512,33 @@ inline bool TabBar::handleRightButtonClick(QMouseEvent *mouseEvent)
         m_renameTabAction = new QAction(QObject::tr("Rename title"), m_rightMenu);
         m_renameTabAction->setObjectName("TabTitleRenameAction");//Add by dzw 2020-11-02
 
+        m_cloneTabAction = new QAction(QObject::tr("Clone Tab"), m_rightMenu);
+        m_cloneTabAction->setObjectName("TabBarCloneTabAction");
+
         connect(m_closeTabAction, &QAction::triggered, this, &TabBar::onCloseTabActionTriggered);
 
         connect(m_closeOtherTabAction, &QAction::triggered, this, &TabBar::onCloseOtherTabActionTriggered);
 
         connect(m_renameTabAction, &QAction::triggered, this, &TabBar::onRenameTabActionTriggered);
 
+        connect(m_cloneTabAction, &QAction::triggered, this, &TabBar::onCloneTabActionTriggered);
         m_rightMenu->addAction(m_closeTabAction);
         m_rightMenu->addAction(m_closeOtherTabAction);
         m_rightMenu->addAction(m_renameTabAction);
+        m_rightMenu->addSeparator();
+        m_rightMenu->addAction(m_cloneTabAction);
 
         m_closeOtherTabAction->setEnabled(true);
         if (this->count() < 2) {
             m_closeOtherTabAction->setEnabled(false);
         }
 
+        m_cloneTabAction->setEnabled(true);
+        MainWindow *window = static_cast<MainWindow *>(this->window());
+        if (window->getTermPage()) {
+            m_cloneTabAction->setEnabled(false);
+        }
+        
         m_rightMenu->exec(mapToGlobal(position));
 
         return true;
@@ -548,6 +560,11 @@ inline void TabBar::onCloseOtherTabActionTriggered()
 inline void TabBar::onRenameTabActionTriggered()
 {
     emit showRenameTabDialog(identifier(m_rightClickTab));
+}
+
+inline void TabBar::onCloneTabActionTriggered()
+{
+    emit cloneTab(identifier(m_rightClickTab));
 }
 
 /*******************************************************************************

@@ -866,6 +866,19 @@ void TermWidget::switchThemeOnSplitScreen()
     }
 }
 
+void TermWidget::cloneSession()
+{
+    // parentPage()->parentMainWindow()->addTab(m_properties,true);
+    // qWarning() << m_properties[WorkingDir]<< m_properties[TabTitle];
+    TermProperties properties = m_properties;
+    properties.setWorkingDir(workingDirectory());
+    parentPage()->parentMainWindow()->addTab(properties,true);
+    if(m_properties[RemoteConfig].canConvert<ServerConfig*>()){
+        ServerConfig *serverConfig = m_properties[RemoteConfig].value<ServerConfig*>();
+        parentPage()->parentMainWindow()->doConnectServer(serverConfig);
+    }
+}
+
 void TermWidget::initTabTitle()
 {
     static ushort sessionNumber = 0;
