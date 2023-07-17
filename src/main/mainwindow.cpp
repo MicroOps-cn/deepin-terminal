@@ -238,6 +238,11 @@ inline void MainWindow::slotCloneTab(QString Identifier)
     getPageByIdentifier(Identifier) -> currentTerminal() -> cloneSession();
 }
 
+inline void MainWindow::slotReconnect(QString Identifier)
+{
+    getPageByIdentifier(Identifier) -> currentTerminal() -> reconnectServer();
+}
+
 void MainWindow::initTabBar()
 {
     m_tabbar = new TabBar(this);
@@ -263,6 +268,9 @@ void MainWindow::initTabBar()
     connect(m_tabbar, &TabBar::showRenameTabDialog, this, &MainWindow::slotShowRenameTabDialog);
 
     connect(m_tabbar, &TabBar::cloneTab, this, &MainWindow::slotCloneTab);
+
+    //重连当前会话
+    connect(m_tabbar, &TabBar::reconnect, this, &MainWindow::slotReconnect);
 
     // 如果此时是拖拽的窗口，暂时先不添加tab(默认添加tab后会新建工作区)
     // 需要使用拖入/拖出标签对应的那个TermWidgetPage控件

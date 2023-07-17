@@ -879,6 +879,16 @@ void TermWidget::cloneSession()
     }
 }
 
+void TermWidget::reconnectServer()
+{
+    TermProperties properties = m_properties;
+    properties.setWorkingDir(workingDirectory());
+    if(m_properties[RemoteConfig].canConvert<ServerConfig*>()){
+        ServerConfig *serverConfig = m_properties[RemoteConfig].value<ServerConfig*>();
+        parentPage()->parentMainWindow()->doConnectServer(serverConfig);
+    }
+}
+
 void TermWidget::initTabTitle()
 {
     static ushort sessionNumber = 0;

@@ -391,6 +391,7 @@ signals:
     void menuCloseOtherTab(QString Identifier);
     void showRenameTabDialog(QString Identifier);
     void cloneTab(QString Identifier);
+    void reconnect(QString Identifier);
 
 private slots:
     /**
@@ -455,6 +456,12 @@ private slots:
      */
     void onCloneTabActionTriggered();
     /**
+     * @brief 重新打开连接
+     * @author xxxxxxxx
+     */
+    void onReconnectActionTriggered();
+
+    /**
      * @brief 窗口关闭处理
      * @author ut000438 王亮
      */
@@ -479,6 +486,7 @@ private:
     QAction *m_closeTabAction = nullptr;
     QAction *m_renameTabAction = nullptr;
     QAction *m_cloneTabAction = nullptr;
+    QAction *m_reconnectAction = nullptr;
 
     DMenu *m_rightMenu = nullptr;
     int m_rightClickTab;

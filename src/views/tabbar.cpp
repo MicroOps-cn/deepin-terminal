@@ -515,6 +515,9 @@ inline bool TabBar::handleRightButtonClick(QMouseEvent *mouseEvent)
         m_cloneTabAction = new QAction(QObject::tr("Clone Tab"), m_rightMenu);
         m_cloneTabAction->setObjectName("TabBarCloneTabAction");
 
+        m_reconnectAction = new QAction(QObject::tr("Reconnect"), m_rightMenu);
+        m_reconnectAction->setObjectName("TabBarReconnectTabAction");
+
         connect(m_closeTabAction, &QAction::triggered, this, &TabBar::onCloseTabActionTriggered);
 
         connect(m_closeOtherTabAction, &QAction::triggered, this, &TabBar::onCloseOtherTabActionTriggered);
@@ -522,11 +525,14 @@ inline bool TabBar::handleRightButtonClick(QMouseEvent *mouseEvent)
         connect(m_renameTabAction, &QAction::triggered, this, &TabBar::onRenameTabActionTriggered);
 
         connect(m_cloneTabAction, &QAction::triggered, this, &TabBar::onCloneTabActionTriggered);
+        connect(m_reconnectAction, &QAction::triggered, this, &TabBar::onReconnectActionTriggered);
+
         m_rightMenu->addAction(m_closeTabAction);
         m_rightMenu->addAction(m_closeOtherTabAction);
         m_rightMenu->addAction(m_renameTabAction);
         m_rightMenu->addSeparator();
         m_rightMenu->addAction(m_cloneTabAction);
+        m_rightMenu->addAction(m_reconnectAction);
 
         m_closeOtherTabAction->setEnabled(true);
         if (this->count() < 2) {
@@ -565,6 +571,11 @@ inline void TabBar::onRenameTabActionTriggered()
 inline void TabBar::onCloneTabActionTriggered()
 {
     emit cloneTab(identifier(m_rightClickTab));
+}
+
+inline void TabBar::onReconnectActionTriggered()
+{
+    emit reconnect(identifier(m_rightClickTab));
 }
 
 /*******************************************************************************
