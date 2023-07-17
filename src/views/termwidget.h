@@ -392,6 +392,7 @@ private slots:
     void onOpenFileInFileManager();
     void onUploadFile();
     void onDownloadFile();
+    void onOpenFileTransfer();
     void onShowSettings();
     void onShowEncoding();
     void onShowCustomCommands();

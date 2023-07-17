@@ -173,8 +173,8 @@ TermWidget::TermWidget(const TermProperties &properties, QWidget *parent) : QTer
         if(properties[RemoteConfig].canConvert<ServerConfig*>()){
             setRemoteTabFormat(tabTitleFormat);
         }else{
-        setTabFormat(tabTitleFormat);
-    }
+            setTabFormat(tabTitleFormat);
+        }
     }
     setFocusPolicy(Qt::NoFocus);
 
@@ -551,6 +551,7 @@ void TermWidget::addMenuActions(const QPoint &pos)
         m_menu->addSeparator();
         m_menu->addAction(tr("Upload file"), this, &TermWidget::onUploadFile);
         m_menu->addAction(tr("Download file"), this, &TermWidget::onDownloadFile);
+        m_menu->addAction(tr("Open File Transfer"), this, &TermWidget::onOpenFileTransfer);
     }
 
     m_menu->addSeparator();
@@ -669,6 +670,16 @@ inline void TermWidget::onUploadFile()
 inline void TermWidget::onDownloadFile()
 {
     parentPage()->parentMainWindow()->remoteDownloadFile();
+}
+
+inline void TermWidget::onOpenFileTransfer()
+{
+    if(m_properties[RemoteConfig].canConvert<ServerConfig*>()){
+        ServerConfig *serverConfig = m_properties[RemoteConfig].value<ServerConfig*>();
+        QProcess *process;
+        QString url = QString("sftp://%1:%2@%3:%4").arg(serverConfig->m_userName, serverConfig->m_password, serverConfig->m_address, serverConfig->m_port);
+        process->startDetached("/opt/apps/org.filezilla/files/bin/filezilla",QStringList(url));
+    }
 }
 
 inline void TermWidget::onShowSettings()
