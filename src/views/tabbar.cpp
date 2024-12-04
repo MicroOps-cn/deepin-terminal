@@ -512,7 +512,7 @@ inline bool TabBar::handleRightButtonClick(QMouseEvent *mouseEvent)
         m_renameTabAction = new QAction(QObject::tr("Rename title"), m_rightMenu);
         m_renameTabAction->setObjectName("TabTitleRenameAction");//Add by dzw 2020-11-02
 
-        m_cloneTabAction = new QAction(QObject::tr("Clone Tab"), m_rightMenu);
+        m_cloneTabAction = new QAction(QObject::tr("Clone tab"), m_rightMenu);
         m_cloneTabAction->setObjectName("TabBarCloneTabAction");
 
         m_reconnectAction = new QAction(QObject::tr("Reconnect"), m_rightMenu);
@@ -540,10 +540,10 @@ inline bool TabBar::handleRightButtonClick(QMouseEvent *mouseEvent)
         }
 
         m_cloneTabAction->setEnabled(true);
-        MainWindow *window = static_cast<MainWindow *>(this->window());
-        if (window->getTermPage()) {
-            m_cloneTabAction->setEnabled(false);
-        }
+        // MainWindow *window = static_cast<MainWindow *>(this->window());
+        // if (window->getTermPage()) {
+        //     m_cloneTabAction->setEnabled(false);
+        // }
         
         m_rightMenu->exec(mapToGlobal(position));
 
