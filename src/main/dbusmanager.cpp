@@ -173,7 +173,19 @@ void DBusManager::callTerminalEntry(QStringList args)
 
 void DBusManager::entry(QStringList args)
 {
-    qDebug() << "recv args" << args;
+    QStringList safeArgs;
+    for (size_t i = 0; i < args.length(); i++)
+    {
+        QString item = args[i];
+        if(item == QString("--remote-password")){
+            safeArgs.append(item);
+            safeArgs.append(QString("************"));
+            i++;
+            continue;
+        }
+        safeArgs.append(item);
+    }
+    qDebug() << "recv args" << safeArgs;
     emit entryArgs(args);
 }
 

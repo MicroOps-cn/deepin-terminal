@@ -521,7 +521,19 @@ void Utils::parseCommandLine(QStringList arguments, TermProperties &Properties, 
         //qDebug() << "parse commandLine";
         parser.process(arguments);
     } else {
-        qDebug() << "input args:" << qPrintable(arguments.join(" "));
+        QStringList safeArgs;
+        for (size_t i = 0; i < arguments.length(); i++)
+        {
+            QString item = arguments[i];
+            if(item == QString("--remote-password")){
+                safeArgs.append(item);
+                safeArgs.append(QString("************"));
+                i++;
+                continue;
+            }
+            safeArgs.append(item);
+        }
+        qDebug() << "input args:" << qPrintable(safeArgs.join(" "));
         qDebug() << "arg: optionWorkDirectory" << parser.value(optWorkDirectory);
         qDebug() << "arg: optionExecute" << Properties[Execute].toStringList().join(" ");
         //    qDebug() << "optionExecute2"<<parser.value(optionExecute2);
